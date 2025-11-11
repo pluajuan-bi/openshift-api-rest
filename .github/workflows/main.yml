@@ -73,9 +73,9 @@ jobs:
 
       - name: Deploy file Helm Chart
         run: |
-          helm show chart oci://registry-1.docker.io/juangrp/openshift-chart --version 7
+          helm show chart oci://registry-1.docker.io/juangrp/openshift-chart --version 9
           helm upgrade --install openshift-backend oci://registry-1.docker.io/juangrp/openshift-chart \
-            --version 7 \
+            --version 9 \
             --values values.yaml \
             --namespace pluaj-dev-dev \
             --atomic --wait
