@@ -1,0 +1,69 @@
+name: openshift-backend
+# Namespace donde se desplegarán los recursos
+namespace: "pluaj-dev-dev"
+
+replicas: 1
+image:
+  repository: "juangrp/openshift-backend"
+  tag: "v1.0.0"
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "800Mi"
+  limits:
+    cpu: "1000m"
+    memory: "1500Mi"
+
+# configuracion service 
+service:
+  type: ClusterIP   # Tipo de servicio (ClusterIP, NodePort, LoadBalancer)
+  port: 9082        # Puerto del servicio
+
+#configuracion env 
+appType: backend # o frontend
+env:
+  backend:
+    SPRING_DATASOURCE_URL: "jdbc:postgresql://openshift-db-postgresql.pluaj-dev-dev.svc.cluster.local:5432/dbUsuarios"
+    SPRING_DATASOURCE_USERNAME: "pluaj"
+    SPRING_DATASOURCE_PASSWORD: "Pichincha1"
+
+
+# Configuración de HPA
+hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+    cpuUtilization: 80
+# configuracion de configmap 
+configmap:
+  enabled: true
+  data:
+    APP_ENV: "production"
+# configuracion de secret 
+secret:
+  enabled: true
+  username: admin
+  password: superseguro
+
+#configuracion de route
+route:
+  enabled: true
+
+#configuracion pvc 
+pvc:
+  enabled: true
+  size: 1Gi
+  storageClass: gp3
+
+#configuracion network
+networkPolicy:
+  enabled: false  # Habilitar/deshabilitar la creación de la NetworkPolicy
+  name: allow-to-backend-ingress  # Nombre de la política
+  podSelector:
+    app: backend-openshift  # Selector de pods destino - Aplica esta política a los pods etiquetados como micro-b
+  fromSelector:
+    app: frontend-openshift  # Selector de pods origen
+  port: 9082  #  Puerto de destino en micro-b (ajústalo según tu app) 
+  protocol: TCP  # Protocolo permitido
+
