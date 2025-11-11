@@ -5,7 +5,7 @@ namespace: "pluaj-dev-dev"
 replicas: 1
 image:
   repository: "juangrp/openshift-backend"
-  tag: "v1.0.0"
+  tag: "{{ tag }}"
 
 resources:
   requests:
