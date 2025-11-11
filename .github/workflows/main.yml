@@ -77,5 +77,4 @@ jobs:
           helm upgrade --install openshift-backend oci://registry-1.docker.io/juangrp/openshift-chart \
             --version 9 \
             --values values.yaml \
-            --namespace pluaj-dev-dev \
-            --atomic --wait
+            --namespace pluaj-dev-dev
